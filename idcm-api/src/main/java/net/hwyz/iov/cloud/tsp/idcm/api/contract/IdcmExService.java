@@ -56,4 +56,9 @@ public class IdcmExService {
      */
     private String hsm;
 
+    /**
+     * MAC地址
+     */
+    private String mac;
+
 }
