@@ -48,6 +48,16 @@ public class IdcmInfoAppService {
     }
 
     /**
+     * 根据序列号获取信息娱乐模块信息
+     *
+     * @param sn 序列号
+     * @return 信息娱乐模块信息
+     */
+    public IdcmPo getBySn(String sn) {
+        return idcmDao.selectBySn(sn);
+    }
+
+    /**
      * 记录信息娱乐模块信息变更日志
      *
      * @param idcmPo 信息娱乐模块对象
