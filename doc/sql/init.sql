@@ -47,3 +47,39 @@ CREATE TABLE `db_idcm`.`tb_idcm_log`
     INDEX `idx_sn` (`sn`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='信息娱乐模块信息变更日志表';
+
+DROP TABLE IF EXISTS `db_idcm`.`tb_vehicle_idcm`;
+CREATE TABLE `db_idcm`.`tb_vehicle_idcm`
+(
+    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `vin`         VARCHAR(20)  NOT NULL COMMENT '车架号',
+    `sn`          VARCHAR(255) NOT NULL COMMENT '序列号',
+    `description` VARCHAR(255)          DEFAULT NULL COMMENT '备注',
+    `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_by`   VARCHAR(64)           DEFAULT NULL COMMENT '创建者',
+    `modify_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    `modify_by`   VARCHAR(64)           DEFAULT NULL COMMENT '修改者',
+    `row_version` INT                   DEFAULT 1 COMMENT '记录版本',
+    `row_valid`   TINYINT               DEFAULT 1 COMMENT '记录是否有效',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY (`vin`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='车辆信息娱乐模块表';
+
+DROP TABLE IF EXISTS `db_idcm`.`tb_vehicle_idcm_log`;
+CREATE TABLE `db_idcm`.`tb_vehicle_idcm_log`
+(
+    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `vin`         VARCHAR(20)  NOT NULL COMMENT '车架号',
+    `sn`          VARCHAR(255) NOT NULL COMMENT '序列号',
+    `description` VARCHAR(255)          DEFAULT NULL COMMENT '备注',
+    `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_by`   VARCHAR(64)           DEFAULT NULL COMMENT '创建者',
+    `modify_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    `modify_by`   VARCHAR(64)           DEFAULT NULL COMMENT '修改者',
+    `row_version` INT                   DEFAULT 1 COMMENT '记录版本',
+    `row_valid`   TINYINT               DEFAULT 1 COMMENT '记录是否有效',
+    PRIMARY KEY (`id`),
+    INDEX `idx_vin` (`vin`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='车辆信息娱乐模块变更日志表';
