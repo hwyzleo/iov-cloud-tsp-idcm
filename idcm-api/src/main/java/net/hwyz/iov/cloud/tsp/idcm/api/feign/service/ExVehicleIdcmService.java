@@ -4,7 +4,10 @@ import net.hwyz.iov.cloud.framework.common.constant.ServiceNameConstants;
 import net.hwyz.iov.cloud.tsp.idcm.api.contract.VehicleIdcmExService;
 import net.hwyz.iov.cloud.tsp.idcm.api.feign.service.factory.ExVehicleIdcmServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -24,5 +27,13 @@ public interface ExVehicleIdcmService {
      */
     @GetMapping("")
     VehicleIdcmExService get(@RequestParam(required = false) String vin, @RequestParam(required = false) String sn);
+
+    /**
+     * 车辆绑定信息娱乐模块
+     *
+     * @param vehicleIdcm 车辆信息娱乐模块
+     */
+    @PostMapping("/bind")
+    void bind(@RequestBody @Validated VehicleIdcmExService vehicleIdcm);
 
 }

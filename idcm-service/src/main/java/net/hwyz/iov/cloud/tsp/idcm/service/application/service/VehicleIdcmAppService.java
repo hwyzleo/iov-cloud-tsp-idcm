@@ -1,7 +1,10 @@
 package net.hwyz.iov.cloud.tsp.idcm.service.application.service;
 
+import cn.hutool.core.util.ObjUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.hwyz.iov.cloud.framework.common.util.StrUtil;
+import net.hwyz.iov.cloud.tsp.idcm.service.infrastructure.exception.VehicleHasBindIdcmException;
 import net.hwyz.iov.cloud.tsp.idcm.service.infrastructure.repository.dao.VehicleIdcmDao;
 import net.hwyz.iov.cloud.tsp.idcm.service.infrastructure.repository.dao.VehicleIdcmLogDao;
 import net.hwyz.iov.cloud.tsp.idcm.service.infrastructure.repository.po.VehicleIdcmLogPo;
@@ -32,6 +35,39 @@ public class VehicleIdcmAppService {
     public VehicleIdcmPo get(String vin, String sn) {
         List<VehicleIdcmPo> vehicleIdcmPoList = vehicleIdcmDao.selectPoByExample(VehicleIdcmPo.builder().vin(vin).sn(sn).build());
         return vehicleIdcmPoList.isEmpty() ? null : vehicleIdcmPoList.get(0);
+    }
+
+    /**
+     * 车辆绑定信息娱乐模块
+     *
+     * @param vin 车架号
+     * @param sn  序列号
+     */
+    public void bind(String vin, String sn) {
+        List<VehicleIdcmPo> vehicleIdcmPoList = vehicleIdcmDao.selectPoByExample(VehicleIdcmPo.builder().vin(vin).build());
+        VehicleIdcmPo vehicleIdcmPo;
+        if (vehicleIdcmPoList.isEmpty()) {
+            vehicleIdcmPo = VehicleIdcmPo.builder()
+                    .vin(vin)
+                    .build();
+        } else {
+            vehicleIdcmPo = vehicleIdcmPoList.get(0);
+        }
+        if (StrUtil.isNotBlank(vehicleIdcmPo.getSn())) {
+            if (!vehicleIdcmPo.getSn().equalsIgnoreCase(sn)) {
+                throw new VehicleHasBindIdcmException(vin, vehicleIdcmPo.getSn(), sn);
+            } else {
+                logger.warn("车辆[{}]在[{}]已绑定过信息娱乐模块[{}]", vin, vehicleIdcmPo.getCreateTime().getTime(), sn);
+                return;
+            }
+        }
+        vehicleIdcmPo.setSn(sn);
+        if (ObjUtil.isNull(vehicleIdcmPo.getId())) {
+            vehicleIdcmDao.insertPo(vehicleIdcmPo);
+        } else {
+            vehicleIdcmDao.updatePo(vehicleIdcmPo);
+        }
+        recordLog(vehicleIdcmPo, "车辆绑定信息娱乐模块");
     }
 
     /**

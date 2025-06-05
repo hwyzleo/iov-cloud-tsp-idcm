@@ -7,10 +7,8 @@ import net.hwyz.iov.cloud.tsp.idcm.api.contract.VehicleIdcmExService;
 import net.hwyz.iov.cloud.tsp.idcm.service.application.service.VehicleIdcmAppService;
 import net.hwyz.iov.cloud.tsp.idcm.service.facade.assembler.VehicleIdcmExServiceAssembler;
 import net.hwyz.iov.cloud.tsp.idcm.service.infrastructure.exception.IdcmBaseException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 车辆信息娱乐模块相关服务接口实现类
@@ -39,6 +37,17 @@ public class VehicleIdcmServiceController {
             throw new IdcmBaseException("车架号与序列号不能都为空");
         }
         return VehicleIdcmExServiceAssembler.INSTANCE.fromPo(vehicleIdcmAppService.get(vin, sn));
+    }
+
+    /**
+     * 车辆绑定信息娱乐模块
+     *
+     * @param vehicleIdcm 车辆信息娱乐模块
+     */
+    @PostMapping("/bind")
+    public void bind(@RequestBody @Validated VehicleIdcmExService vehicleIdcm) {
+        logger.info("车辆[{}]绑定信息娱乐模块[{}]", vehicleIdcm.getVin(), vehicleIdcm.getSn());
+        vehicleIdcmAppService.bind(vehicleIdcm.getVin(), vehicleIdcm.getSn());
     }
 
 }

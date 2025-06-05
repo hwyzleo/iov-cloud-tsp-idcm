@@ -23,6 +23,11 @@ public class ExVehicleIdcmServiceFallbackFactory implements FallbackFactory<ExVe
                 logger.error("车辆信息娱乐模块相关服务根据车架号[{}]或序列号[{}]获取车辆信息娱乐模块调用异常", vin, sn, throwable);
                 return null;
             }
+
+            @Override
+            public void bind(VehicleIdcmExService vehicleIdcm) {
+                logger.error("车辆信息娱乐模块相关服务车辆[{}]绑定信息娱乐模块[{}]调用异常", vehicleIdcm.getVin(), vehicleIdcm.getSn(), throwable);
+            }
         };
     }
 }
